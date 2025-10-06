@@ -4,6 +4,7 @@ import com.minucecoding.brief_ai_with_spring.client.NewsApiClient;
 import com.minucecoding.brief_ai_with_spring.client.OllamaClient;
 import com.minucecoding.brief_ai_with_spring.dto.NewsApiResponse;
 import com.minucecoding.brief_ai_with_spring.dto.NewsSummaryResponse;
+import com.minucecoding.brief_ai_with_spring.dto.OllamaResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,15 +25,15 @@ public class NewsBriefService {
         this.ollamaClient = ollamaClient;
     }
 
-    public NewsSummaryResponse generateGeneralNewsBrief() {
+    public NewsSummaryResponse generateGeneralNewsBrief(boolean isRender) {
         final NewsApiResponse newsApiResponse = newsApiClient.getTopHeadlines();
         log.info("Requesting summary for {} articles", newsApiResponse.getArticles().size());
 
-        final OllamaResponse ollamaResponse = ollamaClient.generateSummary(newsApiResponse.getArticles(), false);
+        final OllamaResponse ollamaResponse = ollamaClient.generateSummary(newsApiResponse.getArticles(), isRender);
 
         return NewsSummaryResponse.builder()
                 .createdAt(java.time.LocalDateTime.now())
-                .summary("This is a placeholder sumary.")
+                .summary(ollamaResponse.getResponse())
                 .build();
     }
 }

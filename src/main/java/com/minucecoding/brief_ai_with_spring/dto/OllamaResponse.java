@@ -12,5 +12,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class OllamaResponse {
-
+    private String response;
+    private boolean done;
 }
